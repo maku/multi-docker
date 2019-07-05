@@ -1,0 +1,24 @@
+sudo: required
+services:
+  - docker
+
+# Build image for test
+before_install:
+  - docker build -t makuat/react-test -f ./client/Dockerfile.dev .
+
+script:
+  - docker run -e CI=true makuat/react-test npm run test
+
+# Build prod versions
+after_success:  
+  - docker build -t makuat/multi-client ./client
+  - docker build -t makuat/multi-nginx ./nginx
+  - docker build -t makuat/multi-server ./server
+  - docker build -t makuat/multi-worker ./worker
+  # Log in to the docker CLI
+  # Environment variables are set in settings of the travis-ci project (maku/multi-docker)
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push makuat/multi-client
+  - docker push makuat/multi-nginx
+  - docker push makuat/multi-server
+  - docker push makuat/multi-worker
