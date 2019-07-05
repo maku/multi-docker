@@ -4,7 +4,7 @@ services:
 
 # Build image for test
 before_install:
-  - docker build -t makuat/react-test -f ./client/Dockerfile.dev .
+  - docker build -t makuat/react-test -f ./client/Dockerfile.dev ./client
 
 script:
   - docker run -e CI=true makuat/react-test npm run test
