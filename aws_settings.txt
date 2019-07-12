@@ -1,4 +1,0 @@
-RDS postgres
-database: complex
-username: complex
-passwort: complexpassword
